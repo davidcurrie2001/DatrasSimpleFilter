@@ -13,21 +13,22 @@ library(shiny)
 shinyUI(fluidPage(
   
   # Application title
-  titlePanel("Old Faithful Geyser Data"),
+  #titlePanel("Old Faithful Geyser Data"),
   
   # Sidebar with a slider input for number of bins 
   sidebarLayout(
     sidebarPanel(
-       sliderInput("bins",
-                   "Number of bins:",
-                   min = 1,
-                   max = 50,
-                   value = 30)
+      selectInput("survey","Select a survey",choices= c("Any")),
+      selectInput("year","Select a year",choices= c("Any")),
+      selectInput("quarter","Select a quarter",choices= c("Any")),
+      selectInput("haul","Select a haul",choices= c("Any")),
+      selectInput("species","Select a species",choices= c("Any")),
+      selectInput("sex","Select a sex",choices= c("Any"))
     ),
     
     # Show a plot of the generated distribution
     mainPanel(
-       plotOutput("distPlot")
+    #   plotOutput("distPlot")
     )
   )
 ))
