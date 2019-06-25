@@ -10,14 +10,16 @@
 library(shiny)
 library(DATRAS)
 
+DefaultText <- "Any"
+
 # Add "Any" to a list if required
 addAnyToList<-function(myList){
   
   if (length(myList)>1){
-    myList<-c("Any", myList)
+    myList<-c(DefaultText, myList)
   } 
   else if (length(myList)==0){
-    myList<-c("Any")
+    myList<-c(DefaultText)
   }
   
   myList
@@ -45,9 +47,6 @@ sexList<-formatList("Sex")
 
 
 
-
-
-# Define server logic required to draw a histogram
 shinyServer(function(session,input, output) {
    
   updateSelectInput(session, "survey", label = NULL, choices = surveyList, selected = NULL)
@@ -57,5 +56,85 @@ shinyServer(function(session,input, output) {
   updateSelectInput(session, "species", label = NULL, choices = speciesList, selected = NULL)
   updateSelectInput(session, "sex", label = NULL, choices = sexList, selected = NULL)
 
+  
+  FilterSummaryData<-function(selectedSurvey,selectedYear,selectedQuarter,selectedHaul,selectedSpecies,selectedSex){
+    
+    # Filter the data using the selected values
+    filteredData <- DATRASdata
+    
+    #selectedSpecies<- "Gadus morhua"
+    
+    if (selectedSurvey != DefaultText){
+      filteredData <- subset.DATRASraw(filteredData, Survey==selectedSurvey)
+    }
+    
+    if (selectedYear != DefaultText){
+      filteredData <- subset.DATRASraw(filteredData, Year==selectedYear)
+    }
+    
+    if (selectedQuarter != DefaultText){
+      filteredData <- subset.DATRASraw(filteredData, Quarter==selectedQuarter)
+    }
+    
+    if (selectedHaul != DefaultText){
+      filteredData <- subset.DATRASraw(filteredData, HaulNo==selectedHaul)
+    }
+    
+    if (selectedSpecies != DefaultText){
+      filteredData <- subset.DATRASraw(filteredData, Species==selectedSpecies)
+    }
+    
+    if (selectedSex != DefaultText){
+      filteredData <- subset.DATRASraw(filteredData, Sex==selectedSex)
+    }
+    
+
+    filteredData
+    
+  }
+  
+  
+  # handle drop down list filters
+  observe({
+    
+    
+    selectedSurvey <- input$survey
+    selectedYear <- input$year
+    selectedQuarter <- input$quarter
+    selectedHaul <- input$haul
+    selectedSpecies <- input$species
+    selectedSex <- input$sex
+    
+    filteredData <- FilterSummaryData(selectedSurvey,selectedYear,selectedQuarter,selectedHaul,selectedSpecies,selectedSex)
+    
+    
+    print(paste("Number of records in HH:",nrow(filteredData[["HH"]])))
+    print(paste("Number of records in HL:",nrow(filteredData[["HL"]])))
+    print(paste("Number of records in CA:",nrow(filteredData[["CA"]])))
+    
+    # save the data
+    saveRDS(filteredData,file = "data/filteredData.rds")
+    
+    #CAdata<-currentData[["CA"]]
+      
+      
+  })
+  
+  # output$testTable <- renderDataTable({
+  #   
+  #   selectedSurvey <- input$survey
+  #   selectedYear <- input$year
+  #   selectedQuarter <- input$quarter
+  #   selectedHaul <- input$haul
+  #   selectedSpecies <- input$species
+  #   selectedSex <- input$sex
+  #   
+  #   filteredData <- FilterSummaryData(selectedSurvey,selectedYear,selectedQuarter,selectedHaul,selectedSpecies,selectedSex)
+  #   
+  #   tempCA<- filteredData[["CA"]]
+  #   tempCA[,c("Survey","Year","Quarter","HaulNo","ScientificName_WoRMS","Sex")]
+  # })
+  
+  
   
 })
