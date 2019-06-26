@@ -105,6 +105,9 @@ shinyServer(function(session,input, output) {
     selectedSpecies <- input$species
     selectedSex <- input$sex
     
+    # Store the filter values in a data frame
+    myFilters <- data.frame("Survey" = selectedSurvey, "Year" = selectedYear, "Quarter" = selectedQuarter, "HaulNo" = selectedHaul,  "ScientificName_WoRMS" =  selectedSpecies,  "Sex" =  selectedSex)
+    
     filteredData <- FilterSummaryData(selectedSurvey,selectedYear,selectedQuarter,selectedHaul,selectedSpecies,selectedSex)
     
     
@@ -113,7 +116,9 @@ shinyServer(function(session,input, output) {
     print(paste("Number of records in CA:",nrow(filteredData[["CA"]])))
     
     # save the data
+    
     saveRDS(filteredData,file = "data/filteredData.rds")
+    write.csv(myFilters, file = "data/myFilters.csv")
     
     #CAdata<-currentData[["CA"]]
       
