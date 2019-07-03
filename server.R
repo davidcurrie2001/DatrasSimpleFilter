@@ -117,7 +117,7 @@ shinyServer(function(session,input, output) {
     
     # save the data
     
-    saveRDS(filteredData,file = "data/filteredData.rds")
+    #saveRDS(filteredData,file = "data/filteredData.rds")
     write.csv(myFilters, file = "data/myFilters.csv")
     
     #CAdata<-currentData[["CA"]]
