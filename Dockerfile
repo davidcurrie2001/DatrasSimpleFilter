@@ -15,4 +15,4 @@ COPY server.R /srv/shiny-server/
 COPY ui.R /srv/shiny-server/
 CMD ["/usr/bin/shiny-server.sh"]
 # docker build -t mi/datrassimplefilter:test .
-# docker run --name datrasfilter -d -rm -v $PWD/DatrasData:/srv/shiny-server/data -p 3847:3838 mi/datrassimplefilter:test
+# docker run --name datrasfilter -d --rm -v $PWD/DatrasData:/srv/shiny-server/data -p 3847:3838 mi/datrassimplefilter:test
