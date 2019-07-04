@@ -62,8 +62,6 @@ shinyServer(function(session,input, output) {
     # Filter the data using the selected values
     filteredData <- DATRASdata
     
-    #selectedSpecies<- "Gadus morhua"
-    
     if (selectedSurvey != DefaultText){
       filteredData <- subset.DATRASraw(filteredData, Survey==selectedSurvey)
     }
@@ -115,31 +113,9 @@ shinyServer(function(session,input, output) {
     print(paste("Number of records in HL:",nrow(filteredData[["HL"]])))
     print(paste("Number of records in CA:",nrow(filteredData[["CA"]])))
     
-    # save the data
-    
-    #saveRDS(filteredData,file = "data/filteredData.rds")
+    # save the filters
     write.csv(myFilters, file = "data/myFilters.csv")
-    
-    #CAdata<-currentData[["CA"]]
-      
-      
+
   })
-  
-  # output$testTable <- renderDataTable({
-  #   
-  #   selectedSurvey <- input$survey
-  #   selectedYear <- input$year
-  #   selectedQuarter <- input$quarter
-  #   selectedHaul <- input$haul
-  #   selectedSpecies <- input$species
-  #   selectedSex <- input$sex
-  #   
-  #   filteredData <- FilterSummaryData(selectedSurvey,selectedYear,selectedQuarter,selectedHaul,selectedSpecies,selectedSex)
-  #   
-  #   tempCA<- filteredData[["CA"]]
-  #   tempCA[,c("Survey","Year","Quarter","HaulNo","ScientificName_WoRMS","Sex")]
-  # })
-  
-  
   
 })
